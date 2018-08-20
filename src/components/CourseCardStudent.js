@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Button } from "react-bootstrap";
 
-function CourseCard({ course, courseToggle, loading }) {
+function CourseCardStudent({ course, formToggle, userId }) {
+  const [enrolled, setEnrolled] = useState(false);
+
+  console.log("course", course);
+
+  useEffect(() => {
+    console.log("Hello");
+    course?.Enrolled?.filter((course) => {
+      if (course?.id === userId) {
+        setEnrolled(true);
+      }
+    });
+  }, []);
+
   return (
     <Card style={{ width: "50rem", margin: "20px 10px" }}>
       {course?.disabled && (
@@ -25,18 +38,21 @@ function CourseCard({ course, courseToggle, loading }) {
         </Card.Body>
       </div>
       <Button
+        disabled={course?.disabled || enrolled}
         style={{
           width: "50%",
           marginRight: "auto",
           marginBottom: "10px",
           marginLeft: "10px",
         }}
-        onClick={() => courseToggle(course?.id, course?.disabled)}
+        onClick={() => formToggle(course?.id)}
       >
-        {course?.disabled ? "Open Admission" : "Close Addmission"}
+        {enrolled && "Already Submitted"}
+        {!enrolled &&
+          (course?.disabled ? "Admission Closed" : "Addmission Form")}
       </Button>
     </Card>
   );
 }
 
-export default CourseCard;
+export default CourseCardStudent;

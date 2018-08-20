@@ -2,17 +2,26 @@ import React, { useState, useEffect } from "react";
 import { Container, Nav, Navbar, Button } from "react-bootstrap";
 import { NavLink, useLocation, Link } from "react-router-dom";
 import classes from "./style.module.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { LOGOUT } from "../redux/types";
 
 function NavbarComponent() {
+  const dispatch = useDispatch();
   const [isAdmin, setIsAdmin] = useState(false);
   const [show, setShow] = useState(false);
   const courses = useSelector((state) => state?.CourseReducer?.courses);
+  const leaves = useSelector((state) => state?.LeaveReducer?.leaves);
+
+  const adminsArr = useSelector((state) => state.AdminReducer.admins);
   const location = useLocation();
 
+  const onLogoutHandler = () => {
+    dispatch({
+      type: LOGOUT,
+    });
+  };
   useEffect(() => {
     let path = location?.pathname?.split("/");
-    console.log("path", path);
     if (path?.[1] === "admin" && path?.[2] !== "signin") {
       setShow(true);
       setIsAdmin(true);
@@ -23,7 +32,7 @@ function NavbarComponent() {
       setShow(false);
       setIsAdmin(false);
     }
-  }, []);
+  }, [location?.pathname]);
 
   return (
     <Navbar bg="primary" variant="dark">
@@ -57,6 +66,15 @@ function NavbarComponent() {
       )}
       {show && isAdmin && (
         <Container>
+          <Button variant="light">
+            <Link
+              to="/"
+              style={{ textDecoration: "none" }}
+              onClick={onLogoutHandler}
+            >
+              LOGOUT
+            </Link>
+          </Button>
           <Navbar.Brand to="/" as={NavLink}>
             SMIT ADMIN PORTAL
           </Navbar.Brand>
@@ -65,11 +83,27 @@ function NavbarComponent() {
               Courses
               <span className={classes?.capsule}>{courses.length || 0}</span>
             </Nav.Link>
+            <Nav.Link as={NavLink} to="/admin/students" exact>
+              Students
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/admin/leaves" exact>
+              Leaves
+              <span className={classes?.capsule}>{leaves.length || 0}</span>
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/admin/adminList" exact>
+              Admins
+              <span className={classes?.capsule}>{adminsArr.length || 0}</span>
+            </Nav.Link>
           </Nav>
         </Container>
       )}
       {show && !isAdmin && (
         <Container>
+          <Button variant="light" onClick={onLogoutHandler}>
+            <Link to="/" style={{ textDecoration: "none" }}>
+              LOGOUT
+            </Link>
+          </Button>
           <Navbar.Brand to="/" as={NavLink}>
             SMIT STUDENT PORTAL
           </Navbar.Brand>
@@ -77,6 +111,10 @@ function NavbarComponent() {
             <Nav.Link as={NavLink} to="/student/home" exact>
               Courses
               <span className={classes?.capsule}>{courses.length || 0}</span>
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/student/leaves" exact>
+              Leaves
+              <span className={classes?.capsule}>{leaves.length || 0}</span>
             </Nav.Link>
           </Nav>
         </Container>

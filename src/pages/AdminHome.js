@@ -31,7 +31,6 @@ function AdminHome() {
         payload: id,
       });
     } catch (error) {
-      console.log("err", error);
       alert("Somethinf went wrong during update course");
     }
   };

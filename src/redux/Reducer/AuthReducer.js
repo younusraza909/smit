@@ -1,4 +1,4 @@
-import { STUDENT_SIGNIN, ADMIN_SIGNIN } from "../types";
+import { STUDENT_SIGNIN, ADMIN_SIGNIN, LOGOUT } from "../types";
 
 const initialState = {
   uid: null,
@@ -22,6 +22,14 @@ const AuthReducer = (state = initialState, action) => {
         uid: action.payload,
         isLoggedIn: true,
         admin: true,
+      };
+    }
+    case LOGOUT: {
+      return {
+        ...state,
+        uid: null,
+        isLoggedIn: false,
+        admin: false,
       };
     }
 
