@@ -1,5 +1,5 @@
 import { setLogLevel } from "firebase/app";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Card } from "react-bootstrap";
 import {
   collection,
@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { db, auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ADMIN_SIGNIN } from "../redux/types";
 
 import { useNavigate } from "react-router-dom";
@@ -21,10 +21,19 @@ function AdminSignin() {
     /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((state) => state?.AuthReducer);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user?.uid && user?.admin) {
+      navigate("/admin/home");
+    } else if (user?.uid && !user?.admin) {
+      navigate("/student/home");
+    }
+  }, []);
 
   const onSubmitForm = async (e) => {
     e.preventDefault();

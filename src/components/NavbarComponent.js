@@ -94,6 +94,9 @@ function NavbarComponent() {
               Admins
               <span className={classes?.capsule}>{adminsArr.length || 0}</span>
             </Nav.Link>
+            <Nav.Link as={NavLink} to="/admin/settings" exact>
+              Settings
+            </Nav.Link>
           </Nav>
         </Container>
       )}

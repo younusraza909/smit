@@ -16,6 +16,7 @@ import StudentList from "./pages/StudentList";
 import StudentLeaves from "./pages/StudentLeaves";
 import AdminLeaves from "./pages/AdminLeaves";
 import AdminList from "./pages/AdminList";
+import AdminSettings from "./pages/AdminSettings";
 
 function App() {
   const dispatch = useDispatch();
@@ -105,6 +106,7 @@ function App() {
         <Route path="/admin/home" element={<AdminHome />} />
         <Route path="/admin/leaves" element={<AdminLeaves />} />
         <Route path="/admin/adminList" element={<AdminList />} />
+        <Route path="/admin/settings" element={<AdminSettings />} />
       </Routes>
     </div>
   );

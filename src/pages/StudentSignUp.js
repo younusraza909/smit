@@ -9,11 +9,13 @@ import {
   doc,
 } from "firebase/firestore";
 import { db, auth } from "../firebase";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-
+import { useEffect } from "react";
 function StudentSignUp() {
   let navigate = useNavigate();
+  const user = useSelector((state) => state?.AuthReducer);
   const emailFilter =
     /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
   const [email, setEmail] = useState("");
@@ -22,6 +24,14 @@ function StudentSignUp() {
   const [loading, setLoading] = useState(false);
   const [cnic, setCnic] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (user?.uid && user?.admin) {
+      navigate("/admin/home");
+    } else if (user?.uid && !user?.admin) {
+      navigate("/student/home");
+    }
+  }, []);
 
   const onSubmitForm = async (e) => {
     setLoading(true);
